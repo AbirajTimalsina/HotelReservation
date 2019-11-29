@@ -19,11 +19,10 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     public Spinner spinCountry, spinRoom;
-    public TextView tvchkin, tvchkout, tvcountry, tvrooms, tvcost, tvVat, tvsc, tnettotal, tvroomcost, tvroomno, totaldays;
+    public TextView tvchkin, tvchkout, tvcountry, tvrooms, tvcost, tvVat, tnettotal, tvroomcost, tvroomno, totaldays;
     public EditText etroom, etchild, etadult, etname;
-    public Button btncal;
-    int y1, y2, m1, m2, d1, d2, diff;
-    double servicecharge;
+    public Button btnCalculate;
+    public int y1, y2, m1, m2, d1, d2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,50 +38,54 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etchild=findViewById(R.id.etchild);
         etadult=findViewById(R.id.etadult);
         etname=findViewById(R.id.etname);
-        btncal=findViewById(R.id.btncal);
+        btnCalculate=findViewById(R.id.btnCalculate);
 
         //output data binding
         tvcost=findViewById(R.id.tvcost);
         tvVat=findViewById(R.id.tvVat);
-        tvsc=findViewById(R.id.tvsc);
         tnettotal=findViewById(R.id.tnettotal);
         tvroomcost=findViewById(R.id.tvroomcost);
         tvroomno=findViewById(R.id.tvroomno);
         totaldays=findViewById(R.id.totaldays);
 
-        btncal.setOnClickListener(new View.OnClickListener() {
+        btnCalculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(etname.getText())){
+
+                if(TextUtils.isEmpty(etname.getText())) {
                     etname.setError("Please enter your name");
                     etname.requestFocus();
+
                     return;
-                }
-                else if(TextUtils.isEmpty(etadult.getText()))
-                {
+
+                } else if (TextUtils.isEmpty(etadult.getText())) {
                     etadult.setError("Please enter number of adults");
                     etadult.requestFocus();
                     return;
-                }
-                else if(TextUtils.isEmpty(etchild.getText())) {
-                    etchild.setError("Please enter number of Children");
+
+                } else if (TextUtils.isEmpty(etchild.getText())) {
+                    etchild.setError("Please enter number of children");
                     etchild.requestFocus();
                     return;
-                }
-                else if(TextUtils.isEmpty(etroom.getText())) {
+
+                } else if (TextUtils.isEmpty(etroom.getText())) {
                     etroom.setError("Please enter number of rooms");
                     etroom.requestFocus();
                     return;
-                }
-                else if(TextUtils.isEmpty(tvchkin.getText())){
-                    tvchkin.setError("Please enter check in Date");
+
+                } else if (TextUtils.isEmpty(tvchkin.getText())) {
+                    tvchkin.setText("Please enter check in Date");
                     tvchkin.requestFocus();
                     return;
-                }
-                else if(TextUtils.isEmpty(tvchkout.getText())){
+
+                } else if (TextUtils.isEmpty(tvchkout.getText())) {
                     tvchkout.setError("Please enter check out Date");
+                    tvchkout.requestFocus();
                     return;
+
                 }
+
+
 
                 Calendar cal1 = Calendar.getInstance();
                 Calendar cal2 = Calendar.getInstance();
@@ -90,42 +93,42 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 cal2.set(y2,m2,d2);
                 long milis1= cal1.getTimeInMillis();
                 long milis2 = cal2.getTimeInMillis();
-                long diff = milis1-milis2;
+                long diff = milis2-milis1;
                 long diffDays=(diff / (86400000));
 
                 int numRoom = Integer.parseInt(etroom.getText().toString());
                 //calculate net total
 
                 double roomprice, totalprice;
-                double vat, servicecharge, nettotal;
+                double vat, nettotal;
 
                 String roomtype = spinRoom.getSelectedItem().toString();
 
-                if(roomtype=="Deluxe"){
+                if(roomtype.equals("Deluxe")){
                     roomprice=2500;
                     totalprice= roomprice * numRoom * diffDays;
                     vat=(0.13 * totalprice) + totalprice;
-                    nettotal= servicecharge = (0.10 * vat) + vat;
+                    nettotal= (0.10 * vat) + vat;
                     tvcost.setText("Total cost is:" +totalprice);
                     tvVat.setText("Price after VAT inclusion:" +vat);
                     tnettotal.setText("Overall Price:" +nettotal);
                 }
 
-                else if(roomtype=="Platenium"){
+                else if(roomtype.equals("Platenium")){
                     roomprice=3500;
                     totalprice= roomprice * numRoom * diffDays;
                     vat=(0.13 * totalprice) + totalprice;
-                    nettotal= servicecharge = (0.10 * vat) + vat;
+                    nettotal= (0.10 * vat) + vat;
                     tvcost.setText("Total cost is:" +totalprice);
                     tvVat.setText("Price after VAT inclusion:" +vat);
                     tnettotal.setText("Overall Price:" +nettotal);
                 }
 
-                else if(roomtype=="Presidential"){
+                else if(roomtype.equals("Presidential")){
                     roomprice=4500;
                     totalprice= roomprice * numRoom * diffDays;
                     vat=(0.13 * totalprice) + totalprice;
-                    nettotal= servicecharge = (0.10 * vat) + vat;
+                    nettotal=(0.10 * vat) + vat;
                     tvcost.setText("Total cost is:" +totalprice);
                     tvVat.setText("Price after VAT inclusion:" +vat);
                     tnettotal.setText("Overall Price:" +nettotal);
